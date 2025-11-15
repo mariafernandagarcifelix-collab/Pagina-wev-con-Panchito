@@ -2,15 +2,163 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
-  height: 100%; /* Asegura que ocupen toda la altura de la ventana */
+:root {
+  --color-fondo: #0a0a14;
+  --color-tarjeta: #1b1b2a;
+  --color-texto: #f0f0f0;
+  --color-placeholder: #8888aa;
+  --color-borde-input: #3e3e60;
+  --color-morado: #180c82;
+  --color-morado-brillante: #4a4abb;
+  --color-brillo: #342882;
+}
+
+/* BASE: Asegura centrado y altura */
+html,
+body,
+#root {
+  height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
-  background: #202020;
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  /* NO pongas estilos de max-width o margin: auto aquí. */
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  min-height: 100vh;
+  display: flex; /* NECESARIO para centrar */
+  justify-content: center; /* NECESARIO para centrar horizontal */
+  align-items: center; /* NECESARIO para centrar vertical */
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* CONTENEDOR DE LA TARJETA - ANCHO AJUSTADO A 700PX */
+.card-container {
+  max-width: 1700px; /* ¡ESTE ES EL ANCHO DESEADO! */
+  width: 100%;
+}
+
+/* TARJETA (GLASSMORHISM) */
+.card-formulario {
+  /* Usando un fondo semitransparente con blur */
+  background-color: rgba(27, 27, 42, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card-formulario:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+/* AJUSTE DE H1 */
+h1 {
+  color: var(--color-texto);
+  font-weight: 700;
+  margin-bottom: 30px !important;
+  text-align: center;
+  font-size: 30px;
+}
+
+/* INPUTS (FORM-CONTROL) */
+.form-control {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde-input);
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: all 0.3s;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-control::placeholder {
+  color: var(--color-placeholder);
+  opacity: 0.8;
+}
+
+.form-control:focus {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto);
+  border-color: var(--color-morado);
+  box-shadow: 0 0 0 0.25rem rgba(74, 74, 187, 1);
+}
+
+/* BOTÓN DE SUBMIT */
+.btn-submit {
+  background-color: var(--color-morado);
+  border: none;
+  color: var(--color-texto);
+  font-weight: bold;
+  padding: 12px 25px;
+  border-radius: 8px;
+  transition: all 0.4s ease-in-out;
+  box-shadow: 0 4px 15px rgba(47, 12, 130, 0.4);
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    var(--color-morado-brillante),
+    transparent
+  );
+  transition: left 0.4s ease-in-out;
+  z-index: -1;
+}
+
+.btn-submit:hover::before {
+  left: 100%;
+}
+.btn-submit:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 20px rgba(74, 74, 187, 1);
+}
+
+/* ESTILOS DE ICONOS Y WRAPPER */
+.input-icon-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.input-icon-wrapper i,
+.input-icon-wrapper svg {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-placeholder);
+  transition: color 0.3s;
+  z-index: 2;
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.input-icon-wrapper .form-control {
+  padding-left: 45px;
+  margin-bottom: 0;
+}
+
+.input-icon-wrapper:focus-within i,
+.input-icon-wrapper:focus-within svg {
+  color: var(--color-morado-brillante);
 }
