@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerRequest } from "../api/auth.js";
 
@@ -63,8 +63,8 @@ const LockIcon = (props) => (
 
 
 function RegisterPage() {
-  const { register, handleSubmit } = useForm();
-  const { signup, IsAuthenticated } = useAuth();
+  const { register, handleSubmit, formState: {errors: formErrors} } = useForm();
+  const { signup, IsAuthenticated, errors: registerErrors } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,16 +72,23 @@ function RegisterPage() {
   }, [IsAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    await signup(values);
+    signup(values);
   });
 
   return (
      <div className='card-container font-sans'> 
-            
+          
             <div className='card-formulario'>
                 
                 <h1>Crea tu Cuenta</h1>
-
+                
+                {
+                  registerErrors.map((error, index) => (
+                    <div key={index} className="bg-red-500 text-white p-2 my-2 text-center mb-2">
+                      {error}
+                    </div>
+                  ))
+                }
                 <form onSubmit={onSubmit}> 
                     
                     {/* Input de Nombre de Usuario con Icono */}
@@ -94,7 +101,8 @@ function RegisterPage() {
                             placeholder='Nombre de usuario' 
                         />
                     </div>
-                    
+                    {formErrors.name && <p className="text-red-500 text-sm mt-4 my-4">El nombre de usuario es obligatorio</p>}
+
                     {/* Input de Correo Electrónico con Icono */}
                     <div className="input-icon-wrapper">
                         <EnvelopeIcon />
@@ -105,6 +113,8 @@ function RegisterPage() {
                             placeholder='Correo electrónico' 
                         />
                     </div>
+                    {formErrors.email && <p className="text-red-500 text-sm mt-4 my-4">El correo electrónico es obligatorio</p>}
+
                     
                     {/* Input de Contraseña con Icono */}
                     <div className="input-icon-wrapper">
@@ -116,12 +126,14 @@ function RegisterPage() {
                             placeholder='Contraseña' 
                         />
                     </div>
+                    {formErrors.password && <p className="text-red-500 text-sm mt-4 my-4">La contraseña es obligatoria</p>}
+
                     
                     {/* Botón de Registro */}
                     <div> 
                         <button 
                             type='submit'
-                            className='btn-submit'
+                            className='btn-submit my-4'
                         >
                             Registrar
                         </button>
