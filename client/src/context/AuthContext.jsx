@@ -1,16 +1,18 @@
-import { useEffect, useState, useContext, createContext } from "react"; 
+import { useEffect, useState, useContext, createContext } from "react";
 import { useForm } from "react-hook-form";
 import { registerRequest } from "../api/auth.js";
+import { LoginRequest } from "../api/auth.js";  
+
 const Link = (props) => <a {...props}>{props.children}</a>;
 const useNavigate = () => {
-    // Simulación de navegación
-    return (path) => console.log(`Navegando a: ${path}`);
-}; 
+  // Simulación de navegación
+  return (path) => console.log(`Navegando a: ${path}`);
+};
 
 export const AuthContext = createContext();
 
 export const useAuth = () => {
-  const context = useContext(AuthContext); 
+  const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth debe usarse con AuthProvider");
   }
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
-      console.log(res); 
+      console.log(res);
       setUser(res.Data);
       setIsAuthenticated(true);
     } catch (error) {
@@ -42,9 +44,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signin = async (user) => {
+    try {
+      const res = await LoginRequest(user);
+      console.log(res);
+      setUser(res.Data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.log(error);
+      setErrors(error.response.data);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ signup, user, IsAuthenticated, errors, }}>
+    <AuthContext.Provider value={{ signup, signin, user, IsAuthenticated, errors }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
